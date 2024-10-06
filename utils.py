@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 import os.path
+import json
 import yaml
 import requests
 
@@ -34,3 +35,14 @@ def load_db(refresh=True):
             mhandle[i].drop()
         r = requests.get('https://api.warframestat.us/{}/search/%20/?by=description'.format(i))
         mhandle[i].insert_many(r.json())
+
+def load_wiki(refresh=True):
+    mhandle, mclient = get_db_handle()
+    if refresh:
+        mhandle['wiki'].drop()
+    with open('wiki-dataset.json', 'r') as wiki:
+        wiki_set = json.loads(wiki.read())
+        insert_data = []
+        for i in wiki_set[0]['Warframes']:
+            insert_data.append(wiki_set[0]['Warframes'][i])
+        mhandle['wiki'].insert_many(insert_data)
