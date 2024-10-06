@@ -1,0 +1,9 @@
+{% if warframes_list %}
+    <ul>
+    {% for warframe in warframes_list %}
+        <li><a href="/warframes/{{warframe.name}}/">/warframes/{{warframe.name}}/</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No Frames Found</p>
+{% endif %}
